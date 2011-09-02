@@ -1,29 +1,60 @@
-﻿<Window x:Class="SimplePdfProcessor.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="SimplePdfProcessor" Height="150" Width="325"
-        WindowStartupLocation="CenterScreen"
-        FocusManager.FocusedElement="{Binding ElementName=lstActivities}">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition MinHeight="50"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="120" />
-        </Grid.ColumnDefinitions>
-        <DockPanel Grid.Column="1" LastChildFill="False" >
-            <Button x:Name="btnGo" Content="Вперёд!" Click="btnGo_Click" DockPanel.Dock="Top" IsDefault="True" />
-            <Button x:Name="btnExit" Content="Выход" Click="btnExit_Click" DockPanel.Dock="Bottom" />
-        </DockPanel>
-        <DockPanel LastChildFill="True">
-            <GroupBox Header="Выберите действие">
-                <StackPanel>
-                    <RadioButton x:Name="rdMerge" Content="Объединить файлы" IsChecked="True" MouseDoubleClick="lstActivities_MouseDoubleClick" />
-                    <RadioButton x:Name="rdDelete" Content="Удалить страницы" MouseDoubleClick="lstActivities_MouseDoubleClick" />
-                    <RadioButton x:Name="rdRotate" Content="Повернуть страницы" MouseDoubleClick="lstActivities_MouseDoubleClick" />
-                </StackPanel>
-            </GroupBox>
-        </DockPanel>
-    </Grid>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window
+	x:Class="SimplePdfProcessor.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	Title="SimplePdfProcessor"
+	Height="150"
+	Width="325"
+	WindowStartupLocation="CenterScreen"
+	FocusManager.FocusedElement="{Binding ElementName=lstActivities}">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				MinHeight="50" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition />
+			<ColumnDefinition
+				Width="120" />
+		</Grid.ColumnDefinitions>
+		<DockPanel
+			Grid.Column="1"
+			LastChildFill="False">
+			<Button
+				x:Name="btnGo"
+				Content="Вперёд!"
+				Click="btnGo_Click"
+				DockPanel.Dock="Top"
+				IsDefault="True" />
+			<Button
+				x:Name="btnExit"
+				Content="Выход"
+				Click="btnExit_Click"
+				DockPanel.Dock="Bottom" />
+		</DockPanel>
+		<DockPanel
+			LastChildFill="True">
+			<GroupBox
+				Header="Выберите действие">
+				<StackPanel>
+					<RadioButton
+						x:Name="rdMerge"
+						Content="Объединить файлы"
+						IsChecked="True"
+						MouseDoubleClick="lstActivities_MouseDoubleClick" />
+					<RadioButton
+						x:Name="rdDelete"
+						Content="Удалить страницы"
+						MouseDoubleClick="lstActivities_MouseDoubleClick" />
+					<RadioButton
+						x:Name="rdRotate"
+						Content="Повернуть страницы"
+						MouseDoubleClick="lstActivities_MouseDoubleClick" />
+					<RadioButton
+						x:Name="rdRectangle"
+						Content="Зарисовать область"
+						MouseDoubleClick="lstActivities_MouseDoubleClick" />
+				</StackPanel>
+			</GroupBox>
+		</DockPanel>
+	</Grid>
 </Window>
