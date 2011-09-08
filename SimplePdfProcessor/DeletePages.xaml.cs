@@ -23,8 +23,7 @@ namespace SimplePdfProcessor
     /// </summary>
     public partial class DeletePages : Window
     {
-        string filename; //имя обрабатываемого файла
-        PdfDocument pdfDoc = null;
+    	PDFDoc pdf = null;
         public DeletePages()
         {
             InitializeComponent();
@@ -42,40 +41,31 @@ namespace SimplePdfProcessor
                 MessageBox.Show("Требуются корректные номера страниц!");
                 return;
             }
-            if (toPage > pdfDoc.PageCount)
+            if (toPage > pdf.PagesCount)
             {
-                toPage = pdfDoc.PageCount;
+                toPage = pdf.PagesCount;
             }
             // Удаляем i раз страницу "С" (при удалении следующая занимает место удаленной ведь!)
             for (int i = fromPage-1; i < toPage; i++)
             {
-                pdfDoc.Pages.RemoveAt(fromPage-1);
+                pdf.DeletePage(fromPage-1);
             }
-            DialogResult = PDFDoc.SavePdf(pdfDoc, true);
+            DialogResult = pdf.SavePDF(true);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+        	pdf = new PDFDoc();
             //Открываем файл
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Filter = "PDF files|*.pdf";
-            if (true == dlg.ShowDialog())
+            bool openResult = pdf.OpenPDF(PdfDocumentOpenMode.Modify);
+            if (openResult)
             {
-                filename = dlg.FileName;
-                pdfDoc = PDFDoc.OpenPDF(filename, PdfDocumentOpenMode.Modify);
-                if (pdfDoc == null)
-                {
-                    MessageBox.Show("При открытии файла произошла ошибка (возможно, он защищён)", "Ошибка!");
-                    this.DialogResult = false;
-                }
-                //Дописываем в label количество страниц
-                lblPageAmount.Content += pdfDoc.PageCount.ToString();
+            	lblPageAmount.Content += pdf.PagesCount.ToString;
             }
             else
             {
-                this.DialogResult = false;
+            	this.DialogResult=false;
             }
-
         }
 
     }
