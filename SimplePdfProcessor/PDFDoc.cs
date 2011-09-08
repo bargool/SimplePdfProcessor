@@ -106,7 +106,6 @@ namespace SimplePdfProcessor
                     return false;
                 }
                 return true;
-
             }
             else
             {

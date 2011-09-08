@@ -60,7 +60,7 @@ namespace SimplePdfProcessor
             bool openResult = pdf.OpenPDF(PdfDocumentOpenMode.Modify);
             if (openResult)
             {
-            	lblPageAmount.Content += pdf.PagesCount.ToString;
+            	lblPageAmount.Content += pdf.PagesCount.ToString();
             }
             else
             {
