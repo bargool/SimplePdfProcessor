@@ -106,6 +106,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="IPDFDoc.cs" />
+    <Compile Include="ITitleBlock.cs" />
     <Compile Include="RectangleWindow.xaml.cs">
       <DependentUpon>RectangleWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -113,6 +114,7 @@
     <Compile Include="RotatePagesWindow.xaml.cs">
       <DependentUpon>RotatePagesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TitleBlock.cs" />
     <Page Include="DeletePages.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
