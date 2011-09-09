@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="SimplePdfProcessor" Height="150" Width="325"
         WindowStartupLocation="CenterScreen"
-        FocusManager.FocusedElement="{Binding ElementName=lstActivities}">
+        FocusManager.FocusedElement="{Binding ElementName=rdMerge}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition MinHeight="50"/>

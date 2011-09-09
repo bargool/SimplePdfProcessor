@@ -17,6 +17,7 @@ using PdfSharp.Pdf.IO;
 using System.IO;
 using iTextSharp;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
 
 namespace SimplePdfProcessor
 {
@@ -25,9 +26,12 @@ namespace SimplePdfProcessor
     /// </summary>
     public partial class MergeWindow : Window
     {
+    	ObservableCollection<PDFDoc> inPdfs = new ObservableCollection<PDFDoc>(); //input pdf files
+        PDFDoc outPdf; //output pdf file
         public MergeWindow()
         {
             InitializeComponent();
+            outPdf = new PDFDoc();
         }
         private void btnAddFile_Click(object sender, RoutedEventArgs e)
         {
@@ -38,43 +42,25 @@ namespace SimplePdfProcessor
             if (true == dlg.ShowDialog())
             {
                 foreach (string filename in dlg.FileNames)
-                    lstMergeFiles.Items.Add(filename);
+                    inPdfs.Add(new PDFDoc(filename, PdfDocumentOpenMode.Import));
             }
         }
 
         private void btnGo_Click(object sender, RoutedEventArgs e)
         {
-            List<PdfDocument> inputDocuments = new List<PdfDocument>();
-            foreach (string filename in lstMergeFiles.Items)
-            {
-                PdfDocument pdfDoc = PDFDoc.OpenPDF(filename, PdfDocumentOpenMode.Import);
-                if (pdfDoc == null)
-                {
-                    MessageBox.Show("При открытии файла произошла ошибка (возможно, он защищён)", "Ошибка!");
-                    this.DialogResult = false;
-                }
-                inputDocuments.Add(pdfDoc);
-            }
-
-            PdfDocument outputDocument = new PdfDocument();
-
-            foreach (PdfDocument pdfFile in inputDocuments)
-            {
-                for (int i = 0; i < pdfFile.PageCount; i++)
-                {
-                    outputDocument.AddPage(pdfFile.Pages[i]);
-                }
-            }
-            DialogResult = PDFDoc.SavePdf(outputDocument, (bool)checkShowFile.IsChecked);
-            //if (fname != "")
-            //{
-            //    DialogResult = true;
-            //}
+        	foreach (PDFDoc doc in inPdfs)
+        	{
+        		foreach (PdfPage page in doc)
+        		{
+        			outPdf.AddPage(page);
+        		}
+        	}
+        	DialogResult = outPdf.SavePDF((bool)checkShowFile.IsChecked);
         }
 
         private void btnRemoveFile_Click(object sender, RoutedEventArgs e)
         {
-            lstMergeFiles.Items.Remove(lstMergeFiles.SelectedItem);
+        	inPdfs.RemoveAt(lstMergeFiles.SelectedIndex);
         }
 
         private void btnUp_Click(object sender, RoutedEventArgs e)
@@ -94,6 +80,13 @@ namespace SimplePdfProcessor
         {
         	//FIXME: moving down file in the list of files
             MessageBox.Show("Не реализовал пока!!");
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Binding binding = new Binding();
+            binding.Source = inPdfs;
+            lstMergeFiles.SetBinding(ListBox.ItemsSourceProperty, binding);
         }
     }
 }
