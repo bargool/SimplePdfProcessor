@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,10 +14,120 @@ using System.Diagnostics;
 
 namespace SimplePdfProcessor
 {
-    class PDFDoc
-    //Some static methods to use in program
+
+	class PDFDoc: IPDFDoc, IEnumerable
+	///<summary>
+    ///	Abstraction for working with PDF
+    ///</summary>
     {
-        public static PdfDocument OpenPDF(string filename, PdfDocumentOpenMode openmode)
+		PdfDocument document; //document to work with
+		PdfDocumentOpenMode openMode;
+		string filename;
+		public string FileName
+		{
+			get
+			{
+				return filename;
+			}
+		}
+		public int PagesCount 
+		{
+			get
+			{
+				return document.PageCount;
+			}
+		}
+		
+		//Constructors
+		public PDFDoc()
+		{}
+		
+		public PDFDoc(string filename, PdfDocumentOpenMode openmode)
+		{
+			if (filename == null)
+				throw new ArgumentNullException("filename is null");
+			this.filename = filename;
+			this.openMode = openmode;
+			this.document = PDFDoc.LoadPDF(FileName, openMode);
+		}
+		
+		//interfaces
+		
+		public IEnumerator GetEnumerator()
+		{
+			return document.Pages.GetEnumerator();
+		}
+		
+		//methods
+		
+		public override string ToString()
+		{
+			return FileName;
+		}
+
+		
+		public void InsertPage(PdfPage page, int index)
+		{
+			if (page == null)
+				throw new ArgumentNullException("page is null");
+			if (index < 0)
+				throw new ArgumentOutOfRangeException("index have to be positive");
+			document.Pages.Insert(index, page);
+		}
+		
+		public void AddPage(PdfPage page)
+		{
+			document.Pages.Add(page);
+		}
+		
+		public void DeletePage(int index)
+		{
+			document.Pages.RemoveAt(index);
+		}
+		
+		public PdfPage GetPage(int index)
+		{
+			return document.Pages[index];
+		}
+		
+		public bool OpenPDF(PdfDocumentOpenMode openmode)
+		{
+            //Открываем файл
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "PDF files|*.pdf";
+            if (true == dlg.ShowDialog())
+            {
+                this.filename = dlg.FileName;
+                this.openMode = openmode;
+                this.document = PDFDoc.LoadPDF(filename, openmode);
+                if (document == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+		}
+		
+		public bool SavePDF(bool showFile)
+		{
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "PDF files|*.pdf";
+            if (true == dlg.ShowDialog())
+            {
+            	this.filename = dlg.FileName;
+                this.document.Save(this.FileName);
+                MessageBox.Show("Done!");
+                if (showFile==true)
+                    Process.Start(this.filename);
+            }
+            return dlg.FileName!=null;			
+		}
+		
+        public static PdfDocument LoadPDF(string filename, PdfDocumentOpenMode openmode)
         //opens PdfDocument
         {
             try
@@ -27,16 +138,18 @@ namespace SimplePdfProcessor
             {
                 //if password protected - returns null
                 if (ex.Message == "To modify the document the owner password is required")
+                {
+                    MessageBox.Show("При открытии файла произошла ошибка (возможно, он защищён)", "Ошибка!");
                     return null; //TODO: open file with import mode and return with openmode
-                //otherwise, it seems file is v1.6 and higher
-                //trying to open via iTextSharp to 
+                    //otherwise, it seems file is v1.6 and higher
+                    //trying to open via iTextSharp to 
+                }
                 return PdfReader.Open(GetCompartibleStream(filename), openmode);
-
             }
         }
 
         static MemoryStream GetCompartibleStream(string filename)
-        //open file via iTextSharp
+        ///<summary>open file via iTextSharp and return pdf v1.4 for PdfSharp</summary>
         {
             MemoryStream outputStream = new MemoryStream();
             iTextSharp.text.pdf.PdfReader reader = new iTextSharp.text.pdf.PdfReader(filename);
@@ -48,24 +161,26 @@ namespace SimplePdfProcessor
             return outputStream;
         }
 
-        public static bool SavePdf(PdfDocument pdfDoc, bool showFile)
-        //save pdffile and return it's name
+        public static bool WritePdf(PdfDocument pdfDoc, string filename)
+        //save pdffile
         {
+        	if (filename == null)
+        		throw new ArgumentNullException("null filename");
             if (pdfDoc.PageCount == 0)
             {
                 MessageBox.Show("Вы пытаетесь записать пустой pdf-файл!");
                 return false;
             }
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.Filter = "PDF files|*.pdf";
-            if (true == dlg.ShowDialog())
+            try
             {
-                pdfDoc.Save(dlg.FileName);
-                MessageBox.Show("Done!");
-                if (showFile==true)
-                    Process.Start(dlg.FileName);
+            	pdfDoc.Save(filename);            	
             }
-            return dlg.FileName!=null;
+            catch (Exception ex)
+            {
+            	throw new IOException("Проблемы с записью файла!");
+            }
+            return true;
         }
+		
     }
 }

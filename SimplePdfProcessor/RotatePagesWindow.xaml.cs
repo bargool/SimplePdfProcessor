@@ -24,8 +24,7 @@ namespace SimplePdfProcessor
     // </summary>
     public partial class RotatePagesWindow : Window
     {
-        string filename; //имя обрабатываемого файла
-        PdfDocument pdfDoc = null;
+        PDFDoc pdf = null;
 
         public RotatePagesWindow()
         {
@@ -39,24 +38,10 @@ namespace SimplePdfProcessor
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+        	pdf = new PDFDoc();
             //Открываем файл
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Filter = "PDF files|*.pdf";
-            if (true == dlg.ShowDialog())
-            {
-                filename = dlg.FileName;
-                pdfDoc = PDFDoc.OpenPDF(filename, PdfDocumentOpenMode.Modify);
-                if (pdfDoc == null)
-                {
-                    MessageBox.Show("При открытии файла произошла ошибка (возможно, он защищён)", "Ошибка!");
-                    this.DialogResult = false;
-                }
-
-            }
-            else
-            {
-                this.DialogResult = false;
-            }
+            bool openResult = pdf.OpenPDF(PdfDocumentOpenMode.Modify);
+            if (!openResult) this.DialogResult=false;
         }
 
         private void btnGO_Click(object sender, RoutedEventArgs e)
@@ -79,11 +64,11 @@ namespace SimplePdfProcessor
             {
                 rotateAngle = 180;
             }
-            foreach (PdfPage page in pdfDoc.Pages)
+            foreach (PdfPage page in pdf)
             {
                 page.Rotate = rotateAngle;
             }
-            DialogResult = PDFDoc.SavePdf(pdfDoc, true);
+            DialogResult = pdf.SavePDF(true);
         }
     }
 }
