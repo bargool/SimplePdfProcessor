@@ -102,7 +102,6 @@ namespace SimplePdfProcessor
                 this.document = PDFDoc.LoadPDF(filename, openmode);
                 if (document == null)
                 {
-                    MessageBox.Show("При открытии файла произошла ошибка (возможно, он защищён)", "Ошибка!");
                     return false;
                 }
                 return true;
@@ -139,9 +138,12 @@ namespace SimplePdfProcessor
             {
                 //if password protected - returns null
                 if (ex.Message == "To modify the document the owner password is required")
+                {
+                    MessageBox.Show("При открытии файла произошла ошибка (возможно, он защищён)", "Ошибка!");
                     return null; //TODO: open file with import mode and return with openmode
-                //otherwise, it seems file is v1.6 and higher
-                //trying to open via iTextSharp to 
+                    //otherwise, it seems file is v1.6 and higher
+                    //trying to open via iTextSharp to 
+                }
                 return PdfReader.Open(GetCompartibleStream(filename), openmode);
             }
         }
