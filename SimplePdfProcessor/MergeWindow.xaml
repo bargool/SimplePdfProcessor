@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Объединить файлы" Height="250" Width="525"
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
-        FocusManager.FocusedElement="{Binding ElementName=btnAddFile}">
+        FocusManager.FocusedElement="{Binding ElementName=btnAddFile}"
+        Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="90" />
@@ -29,7 +30,8 @@
                 <Button x:Name="btnUp" Content="Вверх" Click="btnUp_Click"/>
                 <Button x:Name="btnDown" Content="Вниз" Click="btnDown_Click"/>
             </StackPanel>
-            <ListBox x:Name="lstMergeFiles" Margin="10,0,0,10" VerticalContentAlignment="Top" VerticalAlignment="Stretch" SelectionMode="Single" />
+            <ListBox x:Name="lstMergeFiles" Margin="10,0,0,10"
+                     VerticalContentAlignment="Top" VerticalAlignment="Stretch" SelectionMode="Single"/>
         </DockPanel>
     </Grid>
 </Window>

@@ -5,7 +5,7 @@
 	Height="150"
 	Width="325"
 	WindowStartupLocation="CenterScreen"
-	FocusManager.FocusedElement="{Binding ElementName=lstActivities}">
+	FocusManager.FocusedElement="{Binding ElementName=rdMerge}">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition

@@ -28,7 +28,6 @@ namespace SimplePdfProcessor
         public MainWindow()
         {
             InitializeComponent();
-            //lstActivities.SelectedIndex=0;
         }
 
         private void btnGo_Click(object sender, RoutedEventArgs e)
