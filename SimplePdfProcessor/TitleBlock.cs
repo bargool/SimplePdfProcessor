@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 
@@ -37,7 +38,8 @@ namespace SimplePdfProcessor
 			}
 		}
 		
-		List<int[4]> TitleBlockFields;
+		List<int[]> TitleBlockFields; //here will be coordinates of rectangles to fill
+		//Координаты должны быть относительно нижнего правого угла
 		
 		//constructors
 		public TitleBlock()
@@ -52,29 +54,40 @@ namespace SimplePdfProcessor
 			dY = dy;
 			this.width = width;
 			this.height = height;
+			this.TitleBlockFields = new List<int[]>{
+				new int[]{0, 0, this.width, this.height}
+			};
 		}
 		
 		public void Draw(PdfPage page)
 		{
 			if (page == null)
 				throw new ArgumentNullException("page is null");
-			
-			double width = sizeX/0.3528;
-        	double height = sizeY/0.3528;
-        	double X;
-        	double Y;
-        	
-        	XGraphics gfx = XGraphics.FromPdfPage(page);
+			foreach (int[] fields in TitleBlockFields)
+			{
+				if (fields.Length != 4)
+				{
+					throw new Exception("field must have 4 points!");
+				}
+				DrawOrientedRectangle(page, //TODO: where is base point??
+			}
+		}
+		
+		void DrawOrientedRectangle(PdfPage page, int X1, int Y1, int X2, int Y2)
+		{
+			if (page == null)
+				throw new ArgumentNullException("page is null");
+			double x1 = X1/0.3528;
+			double y1 = Y1/0.3528;
+			double x2 = X2/0.3528;
+			double y2 = Y2/0.3528;
+			XGraphics gfx = XGraphics.FromPdfPage(page);
         	switch (page.Orientation){
-        		case PageOrientation.Landscape:
-        			X = width;
-        			Y = (double)page.Height;
-        			gfx.DrawRectangle(XBrushes.Black, 0, Y-width, height, X);
-        			break;
         		case PageOrientation.Portrait:
-        			X = (double)page.Width;
-        			Y = (double)page.Height;
-        			gfx.DrawRectangle(XBrushes.Black, X-width, Y-height, X, Y);
+        			gfx.DrawRectangle(XBrushes.Black, x1, y1, x2, y2);
+        			break;
+        		case PageOrientation.Landscape:
+        			gfx.DrawRectangle(XBrushes.Black, page.Width-y1, page.Height-x1, page.Width-y2, page.Height-x2);
         			break;
         		default:
         			throw new Exception("Invalid value for PageOrientation");
