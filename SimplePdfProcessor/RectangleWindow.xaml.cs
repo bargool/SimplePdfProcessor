@@ -29,8 +29,7 @@ namespace SimplePdfProcessor
 	/// </summary>
 	public partial class RectangleWindow : Window
 	{
-        string filename; //имя обрабатываемого файла
-        PdfDocument pdfDoc = null;
+		PDFDoc pdf = null;
 
 		public RectangleWindow()
 		{
@@ -50,57 +49,20 @@ namespace SimplePdfProcessor
                 return;
             }
             
-            foreach (PdfPage page in pdfDoc.Pages)
+            foreach (PdfPage page in pdf)
             {
-            	DrawRectangle(page, SizeX, SizeY);
+            	BigTitleBlock title = new BigTitleBlock(5, 5, SizeX, SizeY);
+            	title.Draw(page);
             }
             
-            DialogResult = PDFDoc.SavePdf(pdfDoc, true);
+            DialogResult = pdf.SavePDF(true);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //Открываем файл
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Filter = "PDF files|*.pdf";
-            if (true == dlg.ShowDialog())
-            {
-                filename = dlg.FileName;
-                pdfDoc = PDFDoc.OpenPDF(filename, PdfDocumentOpenMode.Modify);
-                if (pdfDoc == null)
-                {
-                    MessageBox.Show("При открытии файла произошла ошибка (возможно, он защищён)", "Ошибка!");
-                    this.DialogResult = false;
-                }
-            }
-            else
-            {
-                this.DialogResult = false;
-            }
-
-        }
-        private void DrawRectangle(PdfPage page, int sizeX, int sizeY)
-        {
-        	double width = sizeX/0.3528;
-        	double height = sizeY/0.3528;
-        	double X;
-        	double Y;
-        	XGraphics gfx = XGraphics.FromPdfPage(page);
-        	switch (page.Orientation){
-        		case PageOrientation.Landscape:
-        			X = width;
-        			Y = (double)page.Height;
-        			gfx.DrawRectangle(XBrushes.Black, 0, Y-width, height, X);
-        			break;
-        		case PageOrientation.Portrait:
-        			X = (double)page.Width;
-        			Y = (double)page.Height;
-        			gfx.DrawRectangle(XBrushes.Black, X-width, Y-height, X, Y);
-        			break;
-        		default:
-        			throw new Exception("Invalid value for PageOrientation");
-        	}
-        	
+        	pdf = new PDFDoc();
+            bool openResult = pdf.OpenPDF(PdfDocumentOpenMode.Modify);
+            if (!openResult) this.DialogResult=false;
         }
 	}
 }

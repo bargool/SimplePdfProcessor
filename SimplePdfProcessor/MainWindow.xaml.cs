@@ -59,9 +59,9 @@ namespace SimplePdfProcessor
             }
             if (true == rdRectangle.IsChecked)
             {
-                RectangleWindow rotatewin = new RectangleWindow();
-                rotatewin.Owner = this;
-                rotatewin.ShowDialog();
+                RectangleWindow rectanglewin = new RectangleWindow();
+                rectanglewin.Owner = this;
+                rectanglewin.ShowDialog();
             }
         }
 

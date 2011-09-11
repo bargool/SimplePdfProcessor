@@ -107,6 +107,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BigTitleBlock.cs" />
     <Compile Include="IPDFDoc.cs" />
     <Compile Include="RectangleWindow.xaml.cs">
       <DependentUpon>RectangleWindow.xaml</DependentUpon>
