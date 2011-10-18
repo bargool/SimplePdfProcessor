@@ -122,6 +122,10 @@ namespace SimplePdfProcessor
             if (true == dlg.ShowDialog())
             {
             	this.filename = dlg.FileName;
+            	if (filename.Substring(filename.Length-5)!=".pdf")
+            	{
+            		filename += ".pdf";
+            	}
                 this.document.Save(this.FileName);
                 MessageBox.Show("Done!");
                 if (showFile==true)
