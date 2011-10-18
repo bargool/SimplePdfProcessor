@@ -40,7 +40,10 @@ namespace SimplePdfProcessor
 		
 		//Constructors
 		public PDFDoc()
-		{}
+		{
+			this.document = new PdfDocument();
+//			this.openMode = PdfDocumentOpenMode.Modify;
+		}
 		
 		public PDFDoc(string filename, PdfDocumentOpenMode openmode)
 		{
