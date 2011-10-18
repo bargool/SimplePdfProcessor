@@ -66,7 +66,6 @@ namespace SimplePdfProcessor
 
         private void btnUp_Click(object sender, RoutedEventArgs e)
         {
-        	//FIXME: moving up file in the list of files
         	int index = lstMergeFiles.SelectedIndex;
         	if (index>0)
         	{
@@ -76,19 +75,19 @@ namespace SimplePdfProcessor
         	{
         		inPdfs.Move(index, lstMergeFiles.Items.Count-1);
         	}
-        	
-            //string tempValue = "";
-            //int index = lstMergeFiles.SelectedIndex;
-            //tempValue = (string)lstMergeFiles.Items[index - 1];
-            //lstMergeFiles.Items[index - 1] = lstMergeFiles.Items[index];
-            //lstMergeFiles.Items[index] = tempValue;
-            //lstMergeFiles.SelectedIndex = index - 1;
         }
 
         private void btnDown_Click(object sender, RoutedEventArgs e)
         {
-        	//FIXME: moving down file in the list of files
-            MessageBox.Show("Не реализовал пока!!");
+        	int index = lstMergeFiles.SelectedIndex;
+        	if (index<lstMergeFiles.Items.Count-1)
+        	{
+        		inPdfs.Move(index, index+1);
+        	}
+        	else
+        	{
+        		inPdfs.Move(index, 0);
+        	}
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
