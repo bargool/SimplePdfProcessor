@@ -27,11 +27,11 @@ namespace SimplePdfProcessor
     public partial class MergeWindow : Window
     {
     	ObservableCollection<PDFDoc> inPdfs = new ObservableCollection<PDFDoc>(); //input pdf files
-        PDFDoc outPdf; //output pdf file
+//        PDFDoc outPdf; //output pdf file
         public MergeWindow()
         {
             InitializeComponent();
-            outPdf = new PDFDoc();
+//            outPdf = new PDFDoc();
         }
         private void btnAddFile_Click(object sender, RoutedEventArgs e)
         {
@@ -48,6 +48,7 @@ namespace SimplePdfProcessor
 
         private void btnGo_Click(object sender, RoutedEventArgs e)
         {
+        	PDFDoc outPdf = new PDFDoc();
         	foreach (PDFDoc doc in inPdfs)
         	{
         		foreach (PdfPage page in doc)
@@ -66,8 +67,16 @@ namespace SimplePdfProcessor
         private void btnUp_Click(object sender, RoutedEventArgs e)
         {
         	//FIXME: moving up file in the list of files
-            MessageBox.Show("Не реализовал пока!!");
-            
+        	int index = lstMergeFiles.SelectedIndex;
+        	if (index>0)
+        	{
+        		inPdfs.Move(index, index-1);
+        	}
+        	else
+        	{
+        		inPdfs.Move(index, lstMergeFiles.Items.Count-1);
+        	}
+        	
             //string tempValue = "";
             //int index = lstMergeFiles.SelectedIndex;
             //tempValue = (string)lstMergeFiles.Items[index - 1];
